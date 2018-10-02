@@ -1,6 +1,7 @@
 package br.com.caelum.pm73.dao;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 import org.hibernate.Session;
 import org.junit.Test;
@@ -25,4 +26,15 @@ public class UsuarioDaoTest {
 		session.close();
 	}
 
+	@Test
+	public void deRetornarNuloSeNaoEncontrarUsuario() {
+		Session session = (Session) new CriadorDeSessao().getSession();
+		UsuarioDao usuarioDao = new UsuarioDao(session);
+
+		Usuario usuarioDoBanco = usuarioDao.porNomeEEmail("João Joaquim", "joao@joaquim.com.br");
+
+		assertNull(usuarioDoBanco);
+
+		session.close();
+	}
 }
