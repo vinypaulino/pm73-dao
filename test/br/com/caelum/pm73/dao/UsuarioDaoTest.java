@@ -4,16 +4,30 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 import org.hibernate.Session;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 import br.com.caelum.pm73.dominio.Usuario;
 
 public class UsuarioDaoTest {
 
+	private Session session;
+	private UsuarioDao usuarioDao;
+
+	@Before
+	public void setUp() {
+		session = (Session) new CriadorDeSessao().getSession();
+		usuarioDao = new UsuarioDao(session);
+	}
+	
+	@After
+	public void endSession() {
+		session.close();
+	}
+
 	@Test
 	public void deveEncontrarPeloNomeEEmail() {
-		Session session = (Session) new CriadorDeSessao().getSession();
-		UsuarioDao usuarioDao = new UsuarioDao(session);
 
 		Usuario novoUsuario = new Usuario("João da Silva", "joão@dasilva.com.br");
 		usuarioDao.salvar(novoUsuario);
@@ -22,19 +36,12 @@ public class UsuarioDaoTest {
 
 		assertEquals("João da Silva", usuarioDoBanco.getNome());
 		assertEquals("joão@dasilva.com.br", usuarioDoBanco.getEmail());
-
-		session.close();
 	}
 
 	@Test
 	public void deRetornarNuloSeNaoEncontrarUsuario() {
-		Session session = (Session) new CriadorDeSessao().getSession();
-		UsuarioDao usuarioDao = new UsuarioDao(session);
 
 		Usuario usuarioDoBanco = usuarioDao.porNomeEEmail("João Joaquim", "joao@joaquim.com.br");
-
 		assertNull(usuarioDoBanco);
-
-		session.close();
 	}
 }
