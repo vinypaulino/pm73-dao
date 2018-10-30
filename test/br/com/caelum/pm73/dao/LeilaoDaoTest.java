@@ -31,7 +31,7 @@ public class LeilaoDaoTest {
 	@After
 	public void endSession() {
 		session.getTransaction().rollback();
-		 session.close(); 
+		session.close(); 
 	}
 
 	@Test
