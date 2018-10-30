@@ -31,7 +31,7 @@ public class LeilaoDaoTest {
 	@After
 	public void endSession() {
 		session.getTransaction().rollback();
-		session.close();
+		 session.close(); 
 	}
 
 	@Test
@@ -68,73 +68,64 @@ public class LeilaoDaoTest {
 
 		assertEquals(0L, total);
 	}
-	
-    @Test
-    public void deveRetornarLeiloesDeProdutosNovos() {
-        Usuario mauricio = new Usuario("Mauricio Aniche",
-                "mauricio@aniche.com.br");
 
-        Leilao produtoNovo = 
-                new Leilao("XBox", 700.0, mauricio, false);
-        Leilao produtoUsado = 
-                new Leilao("Geladeira", 1500.0, mauricio,true);
+	@Test
+	public void deveRetornarLeiloesDeProdutosNovos() {
+		Usuario mauricio = new Usuario("Mauricio Aniche", "mauricio@aniche.com.br");
 
-        usuarioDao.salvar(mauricio);
-        leilaoDao.salvar(produtoNovo);
-        leilaoDao.salvar(produtoUsado);
+		Leilao produtoNovo = new Leilao("XBox", 700.0, mauricio, false);
+		Leilao produtoUsado = new Leilao("Geladeira", 1500.0, mauricio, true);
 
-        List<Leilao> novos = leilaoDao.novos();
+		usuarioDao.salvar(mauricio);
+		leilaoDao.salvar(produtoNovo);
+		leilaoDao.salvar(produtoUsado);
 
-        assertEquals(1, novos.size());
-        assertEquals("XBox", novos.get(0).getNome());
-    }
-    
-    @Test
-    public void deveTrazerSomenteLeiloesAntigos() {
-        Usuario mauricio = new Usuario("Mauricio Aniche",
-                "mauricio@aniche.com.br");
+		List<Leilao> novos = leilaoDao.novos();
 
-        Leilao recente = 
-                new Leilao("XBox", 700.0, mauricio, false);
-        Leilao antigo = 
-                new Leilao("Geladeira", 1500.0, mauricio,true);
+		assertEquals(1, novos.size());
+		assertEquals("XBox", novos.get(0).getNome());
+	}
 
-        Calendar dataRecente = Calendar.getInstance();
-        Calendar dataAntiga = Calendar.getInstance();
-        dataAntiga.add(Calendar.DAY_OF_MONTH, -10);
+	@Test
+	public void deveTrazerSomenteLeiloesAntigos() {
+		Usuario mauricio = new Usuario("Mauricio Aniche", "mauricio@aniche.com.br");
 
-        recente.setDataAbertura(dataRecente);
-        antigo.setDataAbertura(dataAntiga);
+		Leilao recente = new Leilao("XBox", 700.0, mauricio, false);
+		Leilao antigo = new Leilao("Geladeira", 1500.0, mauricio, true);
 
-        usuarioDao.salvar(mauricio);
-        leilaoDao.salvar(recente);
-        leilaoDao.salvar(antigo);
+		Calendar dataRecente = Calendar.getInstance();
+		Calendar dataAntiga = Calendar.getInstance();
+		dataAntiga.add(Calendar.DAY_OF_MONTH, -10);
 
-        List<Leilao> antigos = leilaoDao.antigos();
+		recente.setDataAbertura(dataRecente);
+		antigo.setDataAbertura(dataAntiga);
 
-        assertEquals(1, antigos.size());
-        assertEquals("Geladeira", antigos.get(0).getNome());
-    }
-    
-    @Test
-    public void deveTrazerSomenteLeiloesAntigosHaMaisDe7Dias() {
-        Usuario mauricio = new Usuario("Mauricio Aniche",
-                "mauricio@aniche.com.br");
+		usuarioDao.salvar(mauricio);
+		leilaoDao.salvar(recente);
+		leilaoDao.salvar(antigo);
 
-        Leilao noLimite = 
-                new Leilao("XBox", 700.0, mauricio, false);
+		List<Leilao> antigos = leilaoDao.antigos();
 
-        Calendar dataAntiga = Calendar.getInstance();
-        dataAntiga.add(Calendar.DAY_OF_MONTH, -7);
+		assertEquals(1, antigos.size());
+		assertEquals("Geladeira", antigos.get(0).getNome());
+	}
 
-        noLimite.setDataAbertura(dataAntiga);
+	@Test
+	public void deveTrazerSomenteLeiloesAntigosHaMaisDe7Dias() {
+		Usuario mauricio = new Usuario("Mauricio Aniche", "mauricio@aniche.com.br");
 
-        usuarioDao.salvar(mauricio);
-        leilaoDao.salvar(noLimite);
+		Leilao noLimite = new Leilao("XBox", 700.0, mauricio, false);
 
-        List<Leilao> antigos = leilaoDao.antigos();
+		Calendar dataAntiga = Calendar.getInstance();
+		dataAntiga.add(Calendar.DAY_OF_MONTH, -7);
 
-        assertEquals(1, antigos.size());
-    }
+		noLimite.setDataAbertura(dataAntiga);
 
+		usuarioDao.salvar(mauricio);
+		leilaoDao.salvar(noLimite);
+
+		List<Leilao> antigos = leilaoDao.antigos();
+
+		assertEquals(1, antigos.size());
+	}
 }
